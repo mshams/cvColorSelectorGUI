@@ -16,6 +16,7 @@ How to use:
    
 Note:
 - There is an sample video of working process in video folder.
+- Pre-built version is available: https://github.com/mshams/cvColorSelectorGUI/releases/tag/v1.0
 
 Samples:
 Selecting the hand:
