@@ -30,9 +30,6 @@ namespace cvColorSelectorGUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //show imagebox current size
-            lblBoxSize.Text = $@"{img1.Width}x{img1.Height}";
-
             cmbType.SelectedIndex = 0;
             grid.MultiSelect = false;
         }
@@ -45,14 +42,18 @@ namespace cvColorSelectorGUI
                 {
                     //open image file
                     filePath = dlgOpen.FileName;
-                    img1.ImageLocation = filePath;
+                    //img1.ImageLocation = filePath;
 
                     //read image file to opencv mat
                     VideoCapture capture = new VideoCapture(filePath);
                     matIn = capture.QueryFrame();
                     matOut = matIn.Clone();
-                    lblOrigSize.Text = $@"{matIn.Width}x{matIn.Height}";
-                    img2.Image = matOut.ToImage<Bgr, Byte>().ToBitmap();
+
+                    img2.Image = matOut.ToImage<Bgr, Byte>();
+                    img1.Image = matOut.ToImage<Bgr, Byte>();
+
+                    //update image sizes
+                    MainForm_Resize(sender, e);
 
                     //set image has opened
                     imageSelected = true;
@@ -76,12 +77,15 @@ namespace cvColorSelectorGUI
                     if (Util.inBox(xPos, yPos, matIn.Width, matIn.Height, img1.Width, img1.Height))
                     {
                         pixel = matIn.ToImage<Bgr, Byte>()[yPos, xPos];
-                        lblStatus.Text = $@"X={xPos}, Y={yPos}; R:{pixel.Red} G:{pixel.Green} B:{pixel.Blue}";
+                        lblStatusColor1.BackColor = Color.FromArgb((int)pixel.Red, (int)pixel.Green, (int)pixel.Blue);
+                        lblStatusRgb.Text = $@"R:{pixel.Red} G:{pixel.Green} B:{pixel.Blue}";
+                        lblStatusPos.Text = $@"X={xPos}, Y={yPos}";
+
                     }
                 }
                 catch (Exception exception)
                 {
-                    lblStatus.Text = $@"X={xPos}, Y={yPos}; Error";
+                    lblStatusPos.Text = $@"-";
                 }
 
             }
@@ -118,12 +122,16 @@ namespace cvColorSelectorGUI
                 numBlue1.Value = trackBlue1.Value = (int)bgr.Blue;
                 numGreen1.Value = trackGreen1.Value = (int)bgr.Green;
                 numRed1.Value = trackRed1.Value = (int)bgr.Red;
+
+                refreshColors1();
             }
             else if (radTo.Checked)
             {
                 numBlue2.Value = trackBlue2.Value = (int)bgr.Blue;
                 numGreen2.Value = trackGreen2.Value = (int)bgr.Green;
                 numRed2.Value = trackRed2.Value = (int)bgr.Red;
+
+                refreshColors2();
             }
         }
 
@@ -134,6 +142,16 @@ namespace cvColorSelectorGUI
                 numRed1.Value, numGreen1.Value, numBlue1.Value,
                 numRed2.Value, numGreen2.Value, numBlue2.Value
                 );
+        }
+
+        private void refreshColors1()
+        {
+            imgSelectedColor1.BackColor = Color.FromArgb(trackRed1.Value, trackGreen1.Value, trackBlue1.Value);
+        }
+
+        private void refreshColors2()
+        {
+            imgSelectedColor2.BackColor = Color.FromArgb(trackRed2.Value, trackGreen2.Value, trackBlue2.Value);
         }
 
         private void num_ValueChanged(object sender, EventArgs e)
@@ -170,6 +188,8 @@ namespace cvColorSelectorGUI
             if (num.Value != track.Value)
             {
                 num.Value = track.Value;
+                refreshColors1();
+                refreshColors2();
             }
 
             filter();
@@ -182,7 +202,9 @@ namespace cvColorSelectorGUI
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            lblBoxSize.Text = $@"{img1.Width}x{img1.Height}";
+            //lblStatusSize.Text = $@"ImageSize: {matIn.Width}x{matIn.Height}";
+            //if (img1.Image != null)
+            //    lblStatusSize.Text += $@" - BoxSize: {img1.Bounds.Width}x{img1.Bounds.Height}";
         }
 
         private void btnDel_Click(object sender, EventArgs e)
@@ -247,7 +269,7 @@ namespace cvColorSelectorGUI
                 }
             }
 
-            img2.Image = matOut.ToImage<Bgr, Byte>().ToBitmap();
+            img2.Image = matOut.ToImage<Bgr, Byte>();
         }
 
         private void getValuesFromControls(out int r1, out int g1, out int b1, out int r2, out int g2, out int b2)
@@ -280,5 +302,7 @@ namespace cvColorSelectorGUI
                 grid["colType", rowIndex].Value = cmbType.Text;
             }
         }
+
+        
     }
 }
