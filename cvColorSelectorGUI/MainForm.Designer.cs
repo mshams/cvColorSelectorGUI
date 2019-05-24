@@ -122,7 +122,6 @@ namespace cvColorSelectorGUI
             this.img2.Location = new System.Drawing.Point(462, 153);
             this.img2.Name = "img2";
             this.img2.Size = new System.Drawing.Size(454, 339);
-            this.img2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.img2.TabIndex = 3;
             this.img2.TabStop = false;
             // 
