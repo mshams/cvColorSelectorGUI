@@ -7,15 +7,15 @@ It's realy hard to use openCV commands by just try and error. So having an easy 
 How to use:
 1. Open your image file.
 2. Select start color by LEFT-Click.
-3. Select end color by RIGHT-CLICK.
-4. Modify the range by numericUpDown or trackbar.
+3. Select end color by RIGHT-Click.
+4. Modify the range by numeric UpDown or trackbar.
 5. Save the range by Add Range button.
 6. If you want to add another color range, you can use Union or Subtract. So find the range values by mouse Left and Right
    and add the range. To see the instant change, select the new range in range list and click EditRow button to change the
    values by live view. After modification, turn off EditRow.
    
 Note:
-- There is an sample video of working process in video folder.
+- There is a sample video of working process in video folder.
 - Pre-built version is available: https://github.com/mshams/cvColorSelectorGUI/releases/tag/v1.0
 
 Samples:
